@@ -1,5 +1,7 @@
-<h1 align="center">djs-embed-builder</h1>
+<h1 align="center">hyperz-djs-embed-builder</h1>
 <br></br>
+
+### This was originally created by PlutoTheDev
 
 ## Usage
 ```js
