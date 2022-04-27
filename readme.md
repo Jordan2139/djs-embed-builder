@@ -2,17 +2,19 @@
 <br></br>
 
 ### This was originally created by PlutoTheDev
+### This was modified to support DarkBot Multi-Language Functionality
 
 ## Usage
 ```js
+const language = require('./en-us.json');
 const { Client } = require('discord.js');
-const djs = require(`djs-embed-builder`);
+const djs = require(`hyperz-djs-embed-builder`);
 const client = new Client();
 client.embed = new djs(client).createEmbed
 
 client.on("interactionCreate", (client, interaction) => {
     if (interaction.commandName == "embed") {
-        client.embed(interaction);
+        client.embed(interaction, language);
     };
 });
 
@@ -21,7 +23,7 @@ client.on("messageCreate", (client, message) => {
     let args = message.content.slice(prefix.length).trim().split(/ +/g);
     let command = args.shift().toLowerCase();
     if (command == "embed") {
-        client.embed(message);
+        client.embed(message, language);
     };
 });
 ```
@@ -29,15 +31,3 @@ client.on("messageCreate", (client, message) => {
 
 ## Dependencies 
 * [Discord.js@13.6.0](https://npmjs.com/package/discord.js)
-
-## Examples
-To see examples go to [examples.js](https://github.com/braxtongpoll/djs-embed-builder/blob/main/src/examples.js)
-
-It's about 120% easy to use though.
-
-## Contact 
-* [Discord](https://plutothe.dev/discord)
-* [Github](https://github.com/braxtongpoll)
-* [Website](https://plutothe.dev/)
-
-Read Me Made by [IceyyM8](https://iceyym8.dev)
