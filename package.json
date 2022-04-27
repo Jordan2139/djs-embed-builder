@@ -1,6 +1,6 @@
 {
-    "name": "djs-embed-builder",
-    "version": "1.1.8",
+    "name": "hyperz-djs-embed-builder",
+    "version": "1.0.0",
     "description": "A discord.js interactive embed builder for slash commands.",
     "main": "index.js",
     "scripts": {
@@ -16,15 +16,15 @@
     "author": "PlutoTheDev",
     "license": "MIT",
     "dependencies": {
-        "discord.js": "^13.1.0"
+        "discord.js": "^13.6.0"
     },
     "devDependencies": {},
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/braxtongpoll/djs-embed-builder.git"
+        "url": "git+https://github.com/itz-hyperz/hyperz-djs-embed-builder.git"
     },
     "bugs": {
-        "url": "https://github.com/braxtongpoll/djs-embed-builder/issues"
+        "url": "https://github.com/itz-hyperz/hyperz-djs-embed-builder/issues"
     },
-    "homepage": "https://github.com/braxtongpoll/djs-embed-builder#readme"
+    "homepage": "https://github.com/itz-hyperz/hyperz-djs-embed-builder#readme"
 }
