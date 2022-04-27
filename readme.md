@@ -26,7 +26,7 @@ client.on("messageCreate", (client, message) => {
 
 
 ## Dependencies 
-* [Discord.js@13.1.0](https://npmjs.com/package/discord.js)
+* [Discord.js@13.6.0](https://npmjs.com/package/discord.js)
 
 ## Examples
 To see examples go to [examples.js](https://github.com/braxtongpoll/djs-embed-builder/blob/main/src/examples.js)
