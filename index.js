@@ -3,11 +3,11 @@ class betterDJS {
     constructor(client) {
         this.client = client;
     };
-    async createEmbed(interaction, language) {
+    async createEmbed(interaction, language, preDefinedEmbed) {
         let bool = 1;
-        let embed = new MessageEmbed()
-            .setAuthor({ name: language.embedBuilder.embedTitle })
-            .setDescription(language.embedBuilder.embedDescription)
+        let embed = (preDefinedEmbed) ? preDefinedEmbed : new MessageEmbed()
+            .setAuthor({ name: "Embed Builder" })
+            .setDescription("Welcome to the interactive embed builder. Use the buttons below to build the embed, after click post!")
         let id = new Date().getTime();
         let row1 = new MessageActionRow().addComponents(
             new MessageButton()
@@ -91,7 +91,7 @@ class betterDJS {
         let channel = interaction.channel;
         let back;
         collecter.on("collect", async function(click) {
-            if (bool == 1) {
+            if (bool == 1 && !preDefinedEmbed) {
                 embed.description = null,
                 embed.author.name = null;
                 bool = 0;
@@ -175,8 +175,10 @@ class betterDJS {
                 };
                 click.editReply({ embeds: [embed], content: " ", components: buttons });
             } else if (click.customId == "post" + id) {
-                channel.send({ embeds: [embed] });
-                click.update({ embeds: [], components: [], content: language.embedBuilder.responses.embedPosted })
+                click.update({ embeds: [], components: [], content: "Embed Posted !" })
+                if (preDefinedEmbed) {
+                    return (messageContent !== null) ?  interaction.channel.messages.edit(interaction.targetId, { embeds: [embed], content: messageContent }) :  interaction.channel.messages.edit(interaction.targetId, { embeds: [embed] });
+                } else return (messageContent !== null) ? channel.send({ content: messageContent, embeds: [embed] }) : channel.send({ embeds: [embed] });
             } else if (click.customId == "fields" + id) {
                 let fieldButtons = await getFieldButtons(embed.fields, id);
                 if (fieldButtons.length) {
