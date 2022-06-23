@@ -3,11 +3,11 @@ class betterDJS {
     constructor(client) {
         this.client = client;
     };
-    async createEmbed(interaction, language, preDefinedEmbed) {
+    async createEmbed(interaction, language) {
         let bool = 1;
-        let embed = (preDefinedEmbed) ? preDefinedEmbed : new MessageEmbed()
-            .setAuthor({ name: "Embed Builder" })
-            .setDescription("Welcome to the interactive embed builder. Use the buttons below to build the embed, after click post!")
+        let embed = new MessageEmbed()
+            .setAuthor({ name: language.embedBuilder.embedTitle })
+            .setDescription(language.embedBuilder.embedDescription)
         let id = new Date().getTime();
         let row1 = new MessageActionRow().addComponents(
             new MessageButton()
@@ -91,7 +91,7 @@ class betterDJS {
         let channel = interaction.channel;
         let back;
         collecter.on("collect", async function(click) {
-            if (bool == 1 && !preDefinedEmbed) {
+            if (bool == 1) {
                 embed.description = null,
                 embed.author.name = null;
                 bool = 0;
@@ -175,10 +175,8 @@ class betterDJS {
                 };
                 click.editReply({ embeds: [embed], content: " ", components: buttons });
             } else if (click.customId == "post" + id) {
-                click.update({ embeds: [], components: [], content: "Embed Posted !" })
-                if (preDefinedEmbed) {
-                    return (messageContent !== null) ?  interaction.channel.messages.edit(interaction.targetId, { embeds: [embed], content: messageContent }) :  interaction.channel.messages.edit(interaction.targetId, { embeds: [embed] });
-                } else return (messageContent !== null) ? channel.send({ content: messageContent, embeds: [embed] }) : channel.send({ embeds: [embed] });
+                channel.send({ embeds: [embed] });
+                click.update({ embeds: [], components: [], content: language.embedBuilder.responses.embedPosted })
             } else if (click.customId == "fields" + id) {
                 let fieldButtons = await getFieldButtons(embed.fields, id);
                 if (fieldButtons.length) {
@@ -199,8 +197,12 @@ class betterDJS {
                 embed.addField(name.content, value.content);
                 let fieldButtons = await getFieldButtons(embed.fields, id);
                 if (fieldButtons.length) {
-                    fieldButtons[fieldButtons.length - 1].components.push(new MessageButton().setCustomId("go-back" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.goBack));
-                    fieldButtons[fieldButtons.length - 1].components.push(new MessageButton().setCustomId("create-new" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.newField));
+                    if (embed.fields.length <= 8) {
+                        fieldButtons[fieldButtons.length - 1].components.push(new MessageButton().setCustomId("go-back" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.goBack));
+                        fieldButtons[fieldButtons.length - 1].components.push(new MessageButton().setCustomId("create-new" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.newField));
+                    } else {
+                        fieldButtons[fieldButtons.length - 1] = new MessageActionRow().addComponents(new MessageButton().setCustomId("go-back" + id).setStyle("DANGER").setLabel('Field Limit Reached - Click To Go Back'));
+                    }
                 } else {
                     fieldButtons[0] = new MessageActionRow().addComponents(new MessageButton().setCustomId("create-new" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.newField)).addComponents(new MessageButton().setCustomId("go-back" + id).setStyle("SUCCESS").setLabel(language.embedBuilder.buttons.goBack));
                 };
@@ -294,10 +296,19 @@ async function getFieldButtons(fields, id) {
     let row = new MessageActionRow()
     let limit = 0;
     for (let field of fields) {
-        if (row.components.length == 5) {
+        if (limit == 3) {
             array.push(row);
             row = new MessageActionRow();
-        };
+        } else if(limit == 6) {
+            array.push(row);
+            row = new MessageActionRow();
+        } else if (limit == 9) {
+            array.push(row);
+            row = new MessageActionRow();
+            row.addComponents(new MessageButton().setCustomId(`edit-field${id}-` + limit).setStyle("SECONDARY").setLabel(field.name));
+            if (row.components.length) array.push(row);
+            return array;        
+        }
         row.addComponents(new MessageButton().setCustomId(`edit-field${id}-` + limit).setStyle("SECONDARY").setLabel(field.name));
         limit++;
     };
